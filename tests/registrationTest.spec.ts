@@ -14,8 +14,8 @@ test.describe('registerfunction', () => {
   test.afterEach(async ({ page }) => {
     await page.close();
   });
-
-  test('Позитивний тест', async() => {
+  test.describe('Позитивні тести', () => {
+  test('Успішна реєстрація', async() => {
     const {name, email, password, confirmPassword}= registrationDataJson.valid;
   // const name='name';
   // const email='sdf@rrr.com';
@@ -35,7 +35,8 @@ test.describe('registerfunction', () => {
     await registrationData.subscribe(); // Підписуємося на розсилку
     await registrationData.submitForm(); // Надсилаємо форму
   });
-
+});
+test.describe('Негативні тести', () => {
   test('Негативний тест (паролі не співпадають)', async () => {
     const name = 'Nastya';
     const email = 'sdf@rreeer.comf';
@@ -93,7 +94,8 @@ test.describe('registerfunction', () => {
     await registrationData.signUpButton
     await registrationData.validationMessage();
   });
-
+});
+test.describe('Перевірка елементів', () => {
   test('Перевірка лого', async ({page}) => {
     await registrationData.checkLogo();
   });
@@ -105,5 +107,5 @@ test.describe('registerfunction', () => {
   test('Перевірка Фейсбуку', async () => {
     await registrationData.checkFacebook();
   });
-// rjvvvvv
+});
 });
