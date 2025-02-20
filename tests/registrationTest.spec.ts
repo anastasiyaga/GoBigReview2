@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { RegistrationData } from '../pages/registrationData';
-import { faker } from '@faker-js/faker';
+import * as fs from 'fs'
+const registrationDataJson = JSON.parse(fs.readFileSync('./data/testData.json', 'utf-8'));
 
 test.describe('registerfunction', () => {
   let registrationData: RegistrationData;
@@ -15,10 +16,11 @@ test.describe('registerfunction', () => {
   });
 
   test('Позитивний тест', async() => {
-  const name='name';
-  const email='sdf@rrr.com';
-  const password='123Qwe123.';
-  const confirmPassword=password;
+    const {name, email, password, confirmPassword}= registrationDataJson.valid;
+  // const name='name';
+  // const email='sdf@rrr.com';
+  // const password='123Qwe123.';
+  // const confirmPassword=password;
   await registrationData.fillForm(name,email, password,confirmPassword);
   await registrationData.acceptTerms();
   await registrationData.subscribe();
@@ -60,10 +62,11 @@ test.describe('registerfunction', () => {
   });
 
   test('Негативний тест (без обов.поля Нейм))', async () => {
-    const name = '';
-    const email = 'rr32r@rr.cff';
-    const password = '123Qwe123.';
-    const confirmPassword = password;
+    const {name, email, password, confirmPassword}= registrationDataJson.emptyName;
+    // const name = '';
+    // const email = 'rr32r@rr.cff';
+    // const password = '123Qwe123.';
+    // const confirmPassword = password;
     await registrationData.fillForm(name, email, password, confirmPassword);
     await registrationData.acceptTerms();
     await registrationData.subscribe();
@@ -80,6 +83,16 @@ test.describe('registerfunction', () => {
     await registrationData.subscribe();
     await registrationData.buttonDisable();
   });
+  test('Негативний тест (невірний емейл))', async () => {
+    const name = 'name1';
+    const email = 'ааа';
+    const password = '123Qwe123.';
+    const confirmPassword = password;
+    await registrationData.fillForm(name, email, password, confirmPassword);
+    await registrationData.acceptTerms();
+    await registrationData.signUpButton
+    await registrationData.validationMessage();
+  });
 
   test('Перевірка лого', async ({page}) => {
     await registrationData.checkLogo();
@@ -92,5 +105,5 @@ test.describe('registerfunction', () => {
   test('Перевірка Фейсбуку', async () => {
     await registrationData.checkFacebook();
   });
-
+// rjvvvvv
 });

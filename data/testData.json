@@ -1,0 +1,20 @@
+{
+    "valid": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "password": "123Qwe123.",
+      "confirmPassword": "123Qwe123."
+    },
+    "invalid": {
+      "name": "",
+      "email": "invalid@email.cd",
+      "password": "123Qwe123.",
+      "confirmPassword": "123Qwe123"
+    },
+    "emptyName": {
+      "name": "",
+      "email": "invalid@email.com",
+      "password": "123Qwe123.",
+      "confirmPassword": "123Qwe123"
+    }
+  }

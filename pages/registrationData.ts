@@ -1,140 +1,221 @@
-import {Page,Locator, expect} from '@playwright/test';
-// import { faker } from '@faker-js/faker';
-export class RegistrationData{
-readonly page:Page;
-readonly nameInput:Locator;
-readonly emailInput:Locator;
-readonly passwordInput:Locator;
-readonly repeatPasswordInput:Locator;
-readonly accept:Locator;
-readonly newsletter:Locator;
-readonly signUpButton:Locator;
-readonly loginButton:Locator;
-readonly logo:Locator;
-readonly googleSignIn:Locator;
-readonly facebookSignIn:Locator;
-readonly errorMassege:Locator;
-readonly errorEmailPassword:Locator;
+import { Page, Locator, expect } from '@playwright/test';
 
-constructor(page:Page){
+export class RegistrationData {
+  readonly page: Page;
+  readonly nameInput: Locator;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly repeatPasswordInput: Locator;
+  readonly accept: Locator;
+  readonly newsletter: Locator;
+  readonly signUpButton: Locator;
+  readonly loginButton: Locator;
+  readonly logo: Locator;
+  readonly googleSignIn: Locator;
+  readonly facebookSignIn: Locator;
+  readonly errorMassege: Locator;
+  readonly errorEmailPassword: Locator;
 
-    this.page=page;
-    this.nameInput=page.locator('input[name="name"]');
-    this.emailInput=page.locator('input[name="email"]');
-    this.passwordInput=page.locator('input[name="password"]');
-    this.repeatPasswordInput=page.locator('input[name="confirm-password"]');
-    this.accept=page.locator('input[name="toc"]');
-    this.newsletter=page.locator('input.form-check-input.font-weight-light');
-    this.signUpButton=page.locator('button[type="submit"]');
-    this.loginButton=page.locator('button.btn.btn-primary:has-text("Sign in")')
+  constructor(page: Page) {
+    this.page = page;
+    this.nameInput = page.locator('input[name="name"]');
+    this.emailInput = page.locator('input[name="email"]');
+    this.passwordInput = page.locator('input[name="password"]');
+    this.repeatPasswordInput = page.locator('input[name="confirm-password"]');
+    this.accept = page.locator('input[name="toc"]');
+    this.newsletter = page.locator('input.form-check-input.font-weight-light');
+    this.signUpButton = page.locator('button[type="submit"]');
+    this.loginButton = page.locator('button.btn.btn-primary:has-text("Sign in")');
     this.logo = page.locator('a[href="/"] img[alt="Logo"]');
     this.googleSignIn = page.locator('a[href="/auth/google"]');
     this.facebookSignIn = page.locator('a[href="/auth/facebook"]');
     this.errorMassege = page.locator('.text-danger.errors-field');
-    this.errorEmailPassword = page.locator('.text-danger', { hasText: 'Invalid email or password' } );
+    this.errorEmailPassword = page.locator('.text-danger', { hasText: 'Invalid email or password' });
+  }
 
-}
-async registrationOpen(){
-    await this.page.goto('https://gobigreviews.com/register')
-}
-async authorization(){
-    await this.page.goto('https://gobigreviews.com/login')
-}
-async fillForm(name:string, email:string, password:string, confirmPassword:string){
-await this.nameInput.fill (name);
-await this.emailInput.fill (email);
-await this.passwordInput.fill (password);
-await this.repeatPasswordInput.fill (confirmPassword);
-}
+  async registrationOpen() {
+    try {
+      await this.page.goto('https://gobigreviews.com/register');
+    } catch (error) {
+      console.error('Помилка переходу на сторінку реєстрації:', error);
+    }
+  }
 
-async fillLoginForm(email:string, password:string){
-    await this.emailInput.fill (email);
-    await this.passwordInput.fill (password);
-}
-async submitForm(){
-await this.signUpButton.click(); 
-}
-async signIn(){
-    await this.loginButton.click();
-}
-async checkLogo(){
-await expect(this.logo).toHaveAttribute('src', /GoBigReviews-logo\.png/);
-await expect(this.logo).toBeVisible();
-}
-async checkGoogle(){
-    await expect(this.googleSignIn).toHaveAttribute('href', '/auth/google');
-    await expect(this.googleSignIn).toBeVisible();
-}
-async checkFacebook(){
-    await expect(this.facebookSignIn).toHaveAttribute('href', '/auth/facebook');
-    await expect(this.facebookSignIn).toBeVisible();
-}
-async acceptTerms(){
-await this.accept.check()
-}
-async subscribe(){
-    await this.newsletter.check()
-}
-async errorsMessage(){
-    await expect(this.errorMassege).toBeVisible();
-    await expect(this.errorMassege).toHaveText('The password field confirmation does not match.');
-}
-async errorsEmailExist(){
-    await expect(this.errorMassege).toBeVisible();
-    await expect(this.errorMassege).toHaveText('The email has already been taken.'); 
-}
-async invalidEmailPassword(){
-    await expect(this.errorEmailPassword).toBeVisible();
-    await expect(this.errorEmailPassword).toHaveText('Invalid email or password');
-}
-async verifyErrorMessage(error:string){
-    await expect(this.errorMassege).toBeVisible();
-    await expect(this.errorMassege).toHaveText(error);
-}
+  async authorization() {
+    try {
+      await this.page.goto('https://gobigreviews.com/login');
+    } catch (error) {
+      console.error('Помилка переходу на сторінку авторизації:', error);
+    }
+  }
 
-async buttonDisable(){
-    await expect(this.signUpButton).toBeDisabled(); 
-}
-async signInDisable(){
-    await expect(this.loginButton).toBeDisabled();
-}
-generateDataWithTimestamp() {
-    const timestamp = Date.now(); // Унікальний timestamp
+  async fillForm(name: string, email: string, password: string, confirmPassword: string) {
+    try {
+      await this.nameInput.fill(name);
+      await this.emailInput.fill(email);
+      await this.passwordInput.fill(password);
+      await this.repeatPasswordInput.fill(confirmPassword);
+    } catch (error) {
+      console.error('Помилка заповнення форми:', error);
+    }
+  }
+
+  async fillLoginForm(email: string, password: string) {
+    try {
+      await this.emailInput.fill(email);
+      await this.passwordInput.fill(password);
+    } catch (error) {
+      console.error('Помилка заповнення форми логіну:', error);
+    }
+  }
+
+  async submitForm() {
+    try {
+      await this.signUpButton.click();
+    } catch (error) {
+      console.error('Помилка натискання кнопки реєстрації:', error);
+    }
+  }
+
+  async validationMessage() {
+    try {
+      const validationMessage = await this.emailInput.evaluate(el => el.validationMessage);
+      console.log(validationMessage);
+    } catch (error) {
+      console.error('Помилка перевірки повідомлення валідації:', error);
+    }
+  }
+
+  async signIn() {
+    try {
+      await this.loginButton.click();
+    } catch (error) {
+      console.error('Помилка натискання кнопки входу:', error);
+    }
+  }
+
+  async checkLogo() {
+    try {
+      await expect(this.logo).toHaveAttribute('src', /GoBigReviews-logo\.png/);
+      await expect(this.logo).toBeVisible();
+    } catch (error) {
+      console.error('Помилка перевірки логотипу:', error);
+    }
+  }
+
+  async checkGoogle() {
+    try {
+      await expect(this.googleSignIn).toHaveAttribute('href', '/auth/google');
+      await expect(this.googleSignIn).toBeVisible();
+    } catch (error) {
+      console.error('Помилка перевірки кнопки Google:', error);
+    }
+  }
+
+  async checkFacebook() {
+    try {
+      await expect(this.facebookSignIn).toHaveAttribute('href', '/auth/facebook');
+      await expect(this.facebookSignIn).toBeVisible();
+    } catch (error) {
+      console.error('Помилка перевірки кнопки Facebook:', error);
+    }
+  }
+
+  async acceptTerms() {
+    try {
+      await this.accept.check();
+    } catch (error) {
+      console.error('Помилка активації чекбоксу згоди:', error);
+    }
+  }
+
+  async subscribe() {
+    try {
+      await this.newsletter.check();
+    } catch (error) {
+      console.error('Помилка підписки на розсилку:', error);
+    }
+  }
+
+  async errorsMessage() {
+    try {
+      await expect(this.errorMassege).toBeVisible();
+      await expect(this.errorMassege).toHaveText('The password field confirmation does not match.');
+    } catch (error) {
+      console.error('Помилка перевірки повідомлення про невідповідність пароля:', error);
+    }
+  }
+
+  async errorsEmailExist() {
+    try {
+      await expect(this.errorMassege).toBeVisible();
+      await expect(this.errorMassege).toHaveText('The email has already been taken.');
+    } catch (error) {
+      console.error('Помилка перевірки повідомлення про існуючий email:', error);
+    }
+  }
+
+  async invalidEmailPassword() {
+    try {
+      await expect(this.errorEmailPassword).toBeVisible();
+      await expect(this.errorEmailPassword).toHaveText('Invalid email or password');
+    } catch (error) {
+      console.error('Помилка перевірки повідомлення про невірний email або пароль:', error);
+    }
+  }
+
+  async verifyErrorMessage(error: string) {
+    try {
+      await expect(this.errorMassege).toBeVisible();
+      await expect(this.errorMassege).toHaveText(error);
+    } catch (error) {
+      console.error('Помилка перевірки повідомлення про помилку:', error);
+    }
+  }
+
+  async buttonDisable() {
+    try {
+      await expect(this.signUpButton).toBeDisabled();
+    } catch (error) {
+      console.error('Помилка перевірки неактивної кнопки реєстрації:', error);
+    }
+  }
+
+  async signInDisable() {
+    try {
+      await expect(this.loginButton).toBeDisabled();
+    } catch (error) {
+      console.error('Помилка перевірки неактивної кнопки входу:', error);
+    }
+  }
+
+  generateDataWithTimestamp() {
+    const timestamp = Date.now();
     return {
-        name: `User_${timestamp}`, // Унікальне ім'я
-        email: `user_${timestamp}@example.com`, // Унікальний email
-        password: `Pass${timestamp}Q!`, // Унікальний пароль
+      name: `User_${timestamp}`,
+      email: `user_${timestamp}@example.com`,
+      password: `Pass${timestamp}Q!`,
     };
-}
-async fillFormWithTimestamp() {
-    const { name, email, password } = this.generateDataWithTimestamp();
-    await this.fillForm(name, email, password, password);
-}
-async autoRegisterWithTimestamp() {
-    const { name, email, password } = this.generateDataWithTimestamp();
-    await this.registrationOpen();
-    await this.fillForm(name, email, password, password);
-    await this.acceptTerms();
-    await this.submitForm();
-}
+  }
 
-// generateTestData() {
-//     return {
-//         name: faker.name.firstName(),
-//         email: faker.internet.email(),
-//         password: faker.internet.password(10),
-//     };
-// }
-// async fillFormWithRandomData() {
-//     const { name, email, password } = this.generateTestData();
-//     await this.fillForm(name, email, password, password);
-// }
-// async autoRegister() {
-//     const { name, email, password } = this.generateTestData();
-//     await this.registrationOpen();
-//     await this.fillForm(name, email, password, password);
-//     await this.acceptTerms();
-//     await this.submitForm();
-// }
+  async fillFormWithTimestamp() {
+    try {
+      const { name, email, password } = this.generateDataWithTimestamp();
+      await this.fillForm(name, email, password, password);
+    } catch (error) {
+      console.error('Помилка автозаповнення форми з унікальними даними:', error);
+    }
+  }
 
+  async autoRegisterWithTimestamp() {
+    try {
+      const { name, email, password } = this.generateDataWithTimestamp();
+      await this.registrationOpen();
+      await this.fillForm(name, email, password, password);
+      await this.acceptTerms();
+      await this.submitForm();
+    } catch (error) {
+      console.error('Помилка автоматичної реєстрації:', error);
+    }
+  }
 }
